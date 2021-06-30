@@ -21,8 +21,9 @@ public class App {
     private static String STATIC_PATH = "generated-files/input";
     private static String JSON = ".json";
 
-    private static double GRID_SIZE = 20;
+    private static double GRID_SIZE = 30;
     private static int FACTIONS = 2;
+    private static double MAX_RADIUS = 0.32;
 
     public static void main(String[] argv) {
 
@@ -38,7 +39,7 @@ public class App {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
-        List<Particle> soldiers = new ArrayList<>();
+        List<Soldier> soldiers = new ArrayList<>();
 
         System.out.println("======================================");
         System.out.println("Generator Parameters:");
@@ -48,18 +49,53 @@ public class App {
         System.out.println("Blue formation: " + args.getBlueFormation());
         System.out.println("--------------------------------------");
 
-        double particleRadius = 0.32; 
-
         // Generate factions
+        int idCounter = 0;
 
+        // First faction
+        List<Soldier> redSoldiers;
+        switch (args.getRedFormation()) {
+            case "phalanx":
+                redSoldiers = generatePhalanx("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                break;
+            case "testudo":
+                redSoldiers = generateTestudo("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                break;
+            case "shieldwall":
+                redSoldiers = generateShieldwall("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                break;
+            default:
+                throw new IllegalArgumentException("Wrong faction input");
+        }
+
+        soldiers.addAll(redSoldiers);
+        idCounter = redSoldiers.size();
+
+        // First faction
+        List<Soldier> blueSoldiers;
+        switch (args.getBlueFormation()) {
+            case "phalanx":
+                blueSoldiers = generatePhalanx("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                break;
+            case "testudo":
+                blueSoldiers = generateTestudo("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                break;
+            case "shieldwall":
+                blueSoldiers = generateShieldwall("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                break;
+            default:
+                throw new IllegalArgumentException("Wrong faction input");
+        }
+
+        soldiers.addAll(blueSoldiers);
 
         // Generating input JSON file
         InputFormat input = new InputFormat(GRID_SIZE, args.getSoldiers(), FACTIONS, soldiers);
 
         String outputURL;
-        if(args.outputFileUrl == null){
+        if (args.outputFileUrl == null) {
             outputURL = STATIC_PATH + "/" + "random-input" + JSON;
-        }else {
+        } else {
             outputURL = args.outputFileUrl;
         }
 
@@ -80,16 +116,174 @@ public class App {
 
     }
 
-    private static boolean hasSuperPosition(Particle p, List<Particle> particles, double radius) {
-        for (Particle other : particles) {
-            double dx = other.x - p.x;
-            double dy = other.y - p.y;
-            double distance = Math.sqrt(dx*dx + dy*dy);
-            if (distance < 2*radius) {
-                return true;
+    // Generates an (ideally) nxn formation with the strongest units on the first rows
+    private static List<Soldier> generatePhalanx(String faction, int soldierAmount, double gridSize, int firstId) {
+        List<Soldier> soldiers = new ArrayList<>();
+        int idCounter = firstId;
+
+        int side = (int) Math.sqrt(soldierAmount);
+        int line = 1;
+
+        double x;
+        double y = 20;
+
+        double maxY = y;
+
+        if (faction == "red") {
+            x = 20;
+        } else if (faction == "blue") {
+            x = 30;
+        } else {
+            throw new IllegalArgumentException("Wrong faction detected");
+        }
+
+        while (soldiers.size() < soldierAmount) {
+
+            if (line <= 3) {
+                soldiers.add(new Soldier(x, y, randDoubleBetween(0.5, 1), faction, idCounter++));
+            } else {
+                soldiers.add(new Soldier(x, y, randDoubleBetween(0, 0.5), faction, idCounter++));
+            }
+
+            if (soldiers.size() % side == 0 && soldiers.size() != 0) {
+                maxY = y;
+                if (faction == "red") {
+                    x -= (MAX_RADIUS * 2 + 0.2);
+                } else {
+                    x += (MAX_RADIUS * 2 + 0.2);
+                }
+                y = 20;
+                line++;
+            } else {
+                y += (MAX_RADIUS * 2 + 0.2);
             }
         }
-        return false;
+
+        double mid = (maxY - 10)/2;
+        double offset = 15 - (10+mid);
+
+        for (Soldier s : soldiers) {
+            s.y += offset;
+        }
+
+        return soldiers;
+    }
+
+    // Generates a mxn formation with the strongest units on the sides
+    private static List<Soldier> generateTestudo(String faction, int soldierAmount, double gridSize, int firstId) {
+        List<Soldier> soldiers = new ArrayList<>();
+        int idCounter = firstId;
+
+        int width = soldierAmount / 10;
+        width = Math.max(3, width/2);
+
+        int line = 1;
+
+        double x;
+        double y = 20;
+
+        double maxY = y;
+
+        if (faction == "red") {
+            x = 20;
+        } else if (faction == "blue") {
+            x = 30;
+        } else {
+            throw new IllegalArgumentException("Wrong faction detected");
+        }
+
+        while (soldiers.size() < soldierAmount) {
+            int position = 1;
+
+            if (line == 1) {
+                soldiers.add(new Soldier(x, y, randDoubleBetween(0.5, 1), faction, idCounter++));
+            } else {
+                if (position == 1 || position == width) {
+                    position++;
+                    soldiers.add(new Soldier(x, y, randDoubleBetween(0.5, 1), faction, idCounter++));
+
+                } else {
+                    soldiers.add(new Soldier(x, y, randDoubleBetween(0, 0.5), faction, idCounter++));
+                }
+            }
+
+            if (soldiers.size() % width == 0 && soldiers.size() != 0) {
+                maxY = y;
+                position = 1;
+                if (faction == "red") {
+                    x -= (MAX_RADIUS * 2 + 0.2);
+                } else {
+                    x += (MAX_RADIUS * 2 + 0.2);
+                }
+                y =  20;
+                line++;
+            } else {
+                y += (MAX_RADIUS * 2 + 0.2);
+            }
+        }
+
+        double mid = (maxY - 10)/2;
+        double offset = 15 - (10+mid);
+
+        for (Soldier s : soldiers) {
+            s.y += offset;
+        }
+
+        return soldiers;
+    }
+
+    private static List<Soldier> generateShieldwall(String faction, int soldierAmount, double gridSize, int firstId){
+        List<Soldier> soldiers = new ArrayList<>();
+        int idCounter = firstId;
+
+        int line = 1;
+
+        int width = soldierAmount / 10;
+        width = Math.max(2, width*3);
+
+        double x;
+        double y = 20;
+
+        double maxY = y;
+
+        if (faction == "red") {
+            x = 20;
+        } else if (faction == "blue") {
+            x = 30;
+        } else {
+            throw new IllegalArgumentException("Wrong faction detected");
+        }
+
+        while (soldiers.size() < soldierAmount) {
+            if (line == 1) {
+                soldiers.add(new Soldier(x, y, randDoubleBetween(0.5, 1), faction, idCounter++));
+            } else {
+                soldiers.add(new Soldier(x, y, randDoubleBetween(0, 0.5), faction, idCounter++));
+
+            }
+
+            if (soldiers.size() % width == 0 && soldiers.size() != 0) {
+                maxY = y;
+                if (faction == "red") {
+                    x -= (MAX_RADIUS * 2 + 0.2);
+                } else {
+                    x += (MAX_RADIUS * 2 + 0.2);
+                }
+                y = 20;    
+                line++;
+            } else {
+                y += (MAX_RADIUS * 2 + 0.2);
+            }
+        }
+
+        double mid = (maxY - 10)/2;
+        double offset = 15 - (10+mid);
+
+        for (Soldier s : soldiers) {
+            s.y += offset;
+        }
+
+        return soldiers;
     }
 
     private static double randDoubleBetween(double a, double b) {
@@ -107,16 +301,17 @@ public class App {
         double gridSize;
         int soldiersAmountPerFaction;
         int factions;
-        List<Particle> soldiers;
+        List<Soldier> soldiers;
     }
 
     @ToString
     @Getter
     @Setter
     @AllArgsConstructor
-    private static class Particle {
+    private static class Soldier {
         double x;
         double y;
+        double training;
         String faction;
         int id;
     }
