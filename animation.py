@@ -1,18 +1,19 @@
 import json
-from matplotlib import colors, pyplot as plt
+from matplotlib import animation, colors, pyplot as plt
 plt.rcParams.update({'font.size': 22})
 
+
 def digest():
-    data = json.load(open("./generated-files/input/random-input.json"))
-    soldiers = list(data['soldiers'])
+    data = json.load(
+        open("./generated-files/simulation/random-simulation.json"))
+    states = list(data['states'])
 
-    gridSize = float(data['gridSize'])
-    soldiersAmountPerFaction = int(data['soldiersAmountPerFaction'])
-    factions = int(data['factions'])
+    gridSize = float(data['l'])
 
-    return soldiers, gridSize, soldiersAmountPerFaction, factions
+    return states, gridSize
 
-soldiers, gridSize, soldiersAmountPerFaction, factions = digest()
+
+states, gridSize = digest()
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -21,7 +22,7 @@ x = []
 y = []
 colors = []
 
-for s in soldiers:
+for s in states[0]:
     x.append(s['x'])
     y.append(s['y'])
 
@@ -34,7 +35,33 @@ for s in soldiers:
 scat = plt.scatter(x, y, color=colors)
 ax.set_aspect('equal', adjustable='box')
 
-plt.xlim(0, 50)
-plt.ylim(0, 40)
+
+def animate(i):
+    data = []
+    colors = []
+
+    for p in states[i+1]:
+        if p['hp'] <= 0:
+            data.append([p['x'] + 1000, p['y']])
+        else:
+            data.append([p['x'], p['y']])
+
+
+        if p['hp'] <= 0:
+            colors.append('white')
+        elif p['faction'] == "red":
+            colors.append('red')
+        else:
+            colors.append('blue')
+
+    scat.set_offsets(data)
+    scat.set_color(colors)
+
+    return scat,
+
+anim = animation.FuncAnimation(fig, animate, frames=len(states)-1, interval=100 , repeat=False)
+
+plt.xlim(0, gridSize)
+plt.ylim(0, gridSize)
 
 plt.show()

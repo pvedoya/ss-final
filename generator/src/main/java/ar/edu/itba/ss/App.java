@@ -18,10 +18,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 public class App {
-    private static String STATIC_PATH = "generated-files/input";
+    private static String OUTPUT_PATH = "generated-files/generator";
     private static String JSON = ".json";
 
-    private static double GRID_SIZE = 30;
+    private static double GRID_SIZE = 50;
     private static int FACTIONS = 2;
     private static double MAX_RADIUS = 0.32;
 
@@ -90,11 +90,11 @@ public class App {
         soldiers.addAll(blueSoldiers);
 
         // Generating input JSON file
-        InputFormat input = new InputFormat(GRID_SIZE, args.getSoldiers(), FACTIONS, soldiers);
+        OutputFormat input = new OutputFormat(GRID_SIZE, args.getSoldiers(), FACTIONS, soldiers);
 
         String outputURL;
         if (args.outputFileUrl == null) {
-            outputURL = STATIC_PATH + "/" + "random-input" + JSON;
+            outputURL = OUTPUT_PATH + "/" + "random-input" + JSON;
         } else {
             outputURL = args.outputFileUrl;
         }
@@ -125,7 +125,7 @@ public class App {
         int line = 1;
 
         double x;
-        double y = 20;
+        double y = 25;
 
         double maxY = y;
 
@@ -148,14 +148,14 @@ public class App {
             if (soldiers.size() % side == 0 && soldiers.size() != 0) {
                 maxY = y;
                 if (faction == "red") {
-                    x -= (MAX_RADIUS * 2 + 0.2);
+                    x -= (MAX_RADIUS * 2 + 0.25);
                 } else {
-                    x += (MAX_RADIUS * 2 + 0.2);
+                    x += (MAX_RADIUS * 2 + 0.25);
                 }
-                y = 20;
+                y = 25;
                 line++;
             } else {
-                y += (MAX_RADIUS * 2 + 0.2);
+                y += (MAX_RADIUS * 2 + 0.25);
             }
         }
 
@@ -180,7 +180,7 @@ public class App {
         int line = 1;
 
         double x;
-        double y = 20;
+        double y = 25;
 
         double maxY = y;
 
@@ -211,14 +211,14 @@ public class App {
                 maxY = y;
                 position = 1;
                 if (faction == "red") {
-                    x -= (MAX_RADIUS * 2 + 0.2);
+                    x -= (MAX_RADIUS * 2 + 0.25);
                 } else {
-                    x += (MAX_RADIUS * 2 + 0.2);
+                    x += (MAX_RADIUS * 2 + 0.25);
                 }
-                y =  20;
+                y =  25;
                 line++;
             } else {
-                y += (MAX_RADIUS * 2 + 0.2);
+                y += (MAX_RADIUS * 2 + 0.25);
             }
         }
 
@@ -242,7 +242,7 @@ public class App {
         width = Math.max(2, width*3);
 
         double x;
-        double y = 20;
+        double y = 25;
 
         double maxY = y;
 
@@ -265,14 +265,14 @@ public class App {
             if (soldiers.size() % width == 0 && soldiers.size() != 0) {
                 maxY = y;
                 if (faction == "red") {
-                    x -= (MAX_RADIUS * 2 + 0.2);
+                    x -= (MAX_RADIUS * 2 + 0.25);
                 } else {
-                    x += (MAX_RADIUS * 2 + 0.2);
+                    x += (MAX_RADIUS * 2 + 0.25);
                 }
-                y = 20;    
+                y = 25;    
                 line++;
             } else {
-                y += (MAX_RADIUS * 2 + 0.2);
+                y += (MAX_RADIUS * 2 + 0.25);
             }
         }
 
@@ -297,7 +297,7 @@ public class App {
     @Getter
     @Setter
     @AllArgsConstructor
-    private static class InputFormat {
+    private static class OutputFormat {
         double gridSize;
         int soldiersAmountPerFaction;
         int factions;

@@ -22,7 +22,7 @@
   </properties>
 
   <modules>
-    <!-- <module>simulation</module> -->
+    <module>simulation</module>
     <module>generator</module>
   </modules>
 
