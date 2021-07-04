@@ -58,6 +58,10 @@ public class Soldier {
     @Setter
     private boolean attacked;
 
+    @Getter
+    @Setter
+    private boolean cpm;
+
     public Soldier(double x, double y, double training, String faction, int id) {
         this.x = x;
         this.y = y;
@@ -81,6 +85,8 @@ public class Soldier {
         this.fighting = false;
 
         this.attacked = false;
+
+        this.cpm = false;
     }
 
     public void moveToNearestEnemy(List<Soldier> enemies, double spaceSize) {
@@ -104,19 +110,24 @@ public class Soldier {
 
         if (nearest != null) {
             double targetAngle;
-
+            double[] v = {0, 0};
+            
             if (faction.equals("red")) {
-                targetAngle = calculateAngleBetween(spaceSize + 3, spaceSize/2);
+                targetAngle = calculateAngleBetween(spaceSize + 5, spaceSize/2);
+
+                v[0] = Math.cos(targetAngle) * Math.exp(-x);
+                v[1] = Math.sin(targetAngle) * Math.exp(-x);
             } else {
-                targetAngle = calculateAngleBetween(-3, spaceSize/2);
+                targetAngle = calculateAngleBetween(-5, spaceSize/2);
+                v[0] = Math.cos(targetAngle) * Math.exp(x);
+                v[1] = Math.sin(targetAngle) * Math.exp(x);
             }
 
-            double[] v = { Math.cos(targetAngle), Math.sin(targetAngle) };
 
-            // double nc = 1.25 * Math.exp(-nearestDistance / 1.25) * Math.cos(omega);
+            double nc = 1.25 * Math.exp(-nearestDistance / 1.25);
 
-            // v[0] = v[0] + nc * Math.cos(nearestAngle);
-            // v[1] = v[1] + nc * Math.sin(nearestAngle);
+            v[0] = v[0] + nc * Math.cos(nearestAngle);
+            v[1] = v[1] + nc * Math.sin(nearestAngle);
 
             if (v[0] == 0) {
                 omega = Math.signum(v[1]) * (Math.PI / 2);
