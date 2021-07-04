@@ -11,7 +11,7 @@ public class Soldier {
     public final static double MIN_R = 0.15;
 
     public final static double TAU = 0.5;
-    public final static double BETA = 1;
+    public final static double BETA = 0.9;
 
     public final static double SPEED = 1.6;
 
@@ -83,7 +83,7 @@ public class Soldier {
         this.attacked = false;
     }
 
-    public void moveToNearestEnemy(List<Soldier> enemies) {
+    public void moveToNearestEnemy(List<Soldier> enemies, double spaceSize) {
         Soldier nearest = null;
         double nearestDistance = Double.POSITIVE_INFINITY;
         double nearestAngle = Double.POSITIVE_INFINITY;
@@ -106,17 +106,17 @@ public class Soldier {
             double targetAngle;
 
             if (faction.equals("red")) {
-                targetAngle = 0;
+                targetAngle = calculateAngleBetween(spaceSize + 5, spaceSize/2);
             } else {
-                targetAngle = Math.PI;
+                targetAngle = calculateAngleBetween(-5, spaceSize/2);
             }
 
             double[] v = { Math.cos(targetAngle), Math.sin(targetAngle) };
 
-            double nc = 1.25 * Math.exp(-nearestDistance / 1.25);
+            // double nc = 1.25 * Math.exp(-nearestDistance / 1.25) * Math.cos(omega);
 
-            v[0] = v[0] + nc * Math.cos(nearestAngle);
-            v[1] = v[1] + nc * Math.sin(nearestAngle);
+            // v[0] = v[0] + nc * Math.cos(nearestAngle);
+            // v[1] = v[1] + nc * Math.sin(nearestAngle);
 
             if (v[0] == 0) {
                 omega = Math.signum(v[1]) * (Math.PI / 2);

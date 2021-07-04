@@ -49,64 +49,64 @@ public class State {
         this.redDeaths = 0;
         this.blueDeaths = 0;
 
-        this.contact = false;
+        this.contact = true;
     }
 
     public void simulate() {
 
         // Fight!
-        for (Soldier redSoldier : redSoldiers) {
-            for (Soldier blueSoldier : blueSoldiers) {
-                if (redSoldier.calculateDistance(blueSoldier.getX(),
-                        blueSoldier.getY()) < (redSoldier.getR() + blueSoldier.getR())) {
+        // for (Soldier redSoldier : redSoldiers) {
+        //     for (Soldier blueSoldier : blueSoldiers) {
+        //         if (redSoldier.calculateDistance(blueSoldier.getX(),
+        //                 blueSoldier.getY()) < (redSoldier.getR() + blueSoldier.getR())) {
 
-                    contact = true;
-                    if (!redSoldier.hasAttacked() && blueSoldier.getHp() > 0 && redSoldier.getHp() > 0) {
-                        redSoldier.setV(0);
-                        blueSoldier.setV(0);
+        //             contact = true;
+        //             if (!redSoldier.hasAttacked() && blueSoldier.getHp() > 0 && redSoldier.getHp() > 0) {
+        //                 redSoldier.setV(0);
+        //                 blueSoldier.setV(0);
 
-                        redSoldier.setAttacked(true);
-                        redSoldier.setFighting(true);
+        //                 redSoldier.setAttacked(true);
+        //                 redSoldier.setFighting(true);
 
-                        double newHp = blueSoldier.getHp() - redSoldier.getDps();
-                        blueSoldier.setHp(newHp);
+        //                 double newHp = blueSoldier.getHp() - redSoldier.getDps();
+        //                 blueSoldier.setHp(newHp);
 
-                    }
+        //             }
 
-                    if (!blueSoldier.hasAttacked() && redSoldier.getHp() > 0 && blueSoldier.getHp() > 0) {
-                        redSoldier.setV(0);
-                        blueSoldier.setV(0);
+        //             if (!blueSoldier.hasAttacked() && redSoldier.getHp() > 0 && blueSoldier.getHp() > 0) {
+        //                 redSoldier.setV(0);
+        //                 blueSoldier.setV(0);
 
-                        blueSoldier.setAttacked(true);
-                        blueSoldier.setFighting(true);
+        //                 blueSoldier.setAttacked(true);
+        //                 blueSoldier.setFighting(true);
 
-                        double newHp = redSoldier.getHp() - blueSoldier.getDps();
-                        redSoldier.setHp(newHp);
-                    }
+        //                 double newHp = redSoldier.getHp() - blueSoldier.getDps();
+        //                 redSoldier.setHp(newHp);
+        //             }
                     
-                    boolean fightEnded = false;
+        //             boolean fightEnded = false;
 
-                    if (blueSoldier.getHp() <= 0 && blueSoldier.isFighting()) {
-                        fightEnded = true;
+        //             if (blueSoldier.getHp() <= 0 && blueSoldier.isFighting()) {
+        //                 fightEnded = true;
 
-                        blueSoldier.setHp(0);
-                        blueDeaths++;
-                    }
+        //                 blueSoldier.setHp(0);
+        //                 blueDeaths++;
+        //             }
 
-                    if (redSoldier.getHp() <= 0 && redSoldier.isFighting()) {
-                        fightEnded = true;
+        //             if (redSoldier.getHp() <= 0 && redSoldier.isFighting()) {
+        //                 fightEnded = true;
 
-                        redSoldier.setHp(0);
-                        redDeaths++;
-                    }
+        //                 redSoldier.setHp(0);
+        //                 redDeaths++;
+        //             }
 
-                    if(fightEnded){
-                        blueSoldier.setFighting(false);
-                        redSoldier.setFighting(false);
-                    }
-                }
-            }
-        }
+        //             if(fightEnded){
+        //                 blueSoldier.setFighting(false);
+        //                 redSoldier.setFighting(false);
+        //             }
+        //         }
+        //     }
+        // }
 
         // Update particle states
         for (Soldier soldier : soldiers) {
@@ -118,13 +118,13 @@ public class State {
         // Makes next move
         for (Soldier redSoldier : redSoldiers) {
             if (redSoldier.getHp() > 0 && !redSoldier.isFighting() && contact) {
-                redSoldier.moveToNearestEnemy(blueSoldiers);
+                redSoldier.moveToNearestEnemy(blueSoldiers, spaceSize);
             }
         }
 
         for (Soldier blueSoldier : blueSoldiers) {
             if (blueSoldier.getHp() > 0 && !blueSoldier.isFighting() && contact) {
-                blueSoldier.moveToNearestEnemy(redSoldiers);
+                blueSoldier.moveToNearestEnemy(redSoldiers, spaceSize);
             }
         }
 
@@ -178,16 +178,12 @@ public class State {
             }
         }
 
-        // Calculate new positions
+        // Calculate new positions and reset attacks
         for (Soldier soldier : soldiers) {
             if (soldier.getHp() > 0 && !soldier.hasAttacked() && !soldier.isFighting()) {
                 soldier.move(spaceSize, dt);
+                soldier.setAttacked(false);
             }
-        }
-
-        // Reset attacks
-        for(Soldier s : soldiers){
-            s.setAttacked(false);
         }
 
     }
