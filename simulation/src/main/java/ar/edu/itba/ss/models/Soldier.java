@@ -106,9 +106,9 @@ public class Soldier {
             double targetAngle;
 
             if (faction.equals("red")) {
-                targetAngle = calculateAngleBetween(spaceSize + 5, spaceSize/2);
+                targetAngle = calculateAngleBetween(spaceSize + 3, spaceSize/2);
             } else {
-                targetAngle = calculateAngleBetween(-5, spaceSize/2);
+                targetAngle = calculateAngleBetween(-3, spaceSize/2);
             }
 
             double[] v = { Math.cos(targetAngle), Math.sin(targetAngle) };
@@ -130,7 +130,13 @@ public class Soldier {
         double dx = Math.cos(omega) * v * dt;
         double dy = Math.sin(omega) * v * dt;
 
-        if (x + dx <= 0 || x + dx >= spaceSize) {
+
+        // for granular motion debugging purposes only
+        // boolean isNotOnOpening = (y + dy <= (spaceSize-1.2)/2 || y+dy >= (spaceSize+1.2)/2);
+        
+        boolean isNotOnOpening = true;
+
+        if (isNotOnOpening && (x + dx <= 0 || x + dx >= spaceSize)) {
             dx = 0;
         }
 

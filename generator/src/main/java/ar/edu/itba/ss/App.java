@@ -64,6 +64,9 @@ public class App {
             case "shieldwall":
                 redSoldiers = generateShieldwall("red", args.getSoldiers(), GRID_SIZE, idCounter);
                 break;
+            case "uniform":
+                redSoldiers = generateUniform("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                break;
             default:
                 throw new IllegalArgumentException("Wrong faction input");
         }
@@ -82,6 +85,9 @@ public class App {
                 break;
             case "shieldwall":
                 blueSoldiers = generateShieldwall("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                break;
+            case "uniform":
+                blueSoldiers = generateUniform("blue", args.getSoldiers(), GRID_SIZE, idCounter);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong faction input");
@@ -164,6 +170,30 @@ public class App {
 
         for (Soldier s : soldiers) {
             s.y += offset;
+        }
+
+        return soldiers;
+    }
+    // Generate uniform
+    private static List<Soldier> generateUniform(String faction, int soldierAmount, double gridSize, int firstId) {
+        List<Soldier> soldiers = new ArrayList<>();
+
+        Double x;
+        Double y;
+        int idCounter = firstId;
+        while (soldiers.size() < soldierAmount) {
+            if (faction == "red") {
+                x = randDoubleBetween(0, gridSize/2.2);
+            } else {
+                x = randDoubleBetween(gridSize/2, gridSize);
+            }
+
+            y = randDoubleBetween(0, gridSize);
+            Soldier p = new Soldier(x, y, randDoubleBetween(0.5, 1), faction, idCounter++);
+
+            if(!hasSuperPosition(p, soldiers, MAX_RADIUS)){
+                soldiers.add(p);
+            }
         }
 
         return soldiers;
@@ -284,6 +314,19 @@ public class App {
         }
 
         return soldiers;
+    }
+
+
+    private static boolean hasSuperPosition(Soldier p, List<Soldier> particles, double radius) {
+        for (Soldier other : particles) {
+            double dx = other.x - p.x;
+            double dy = other.y - p.y;
+            double distance = Math.sqrt(dx*dx + dy*dy);
+            if (distance < 2*radius) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static double randDoubleBetween(double a, double b) {
