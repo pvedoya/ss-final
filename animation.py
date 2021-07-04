@@ -41,10 +41,7 @@ def animate(i):
     colors = []
 
     for p in states[i+1]:
-        if p['hp'] <= 0:
-            data.append([p['x'] + 1000, p['y']])
-        else:
-            data.append([p['x'], p['y']])
+        data.append([p['x'], p['y']])
 
 
         if p['hp'] <= 0:
