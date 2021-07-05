@@ -61,4 +61,7 @@ anim = animation.FuncAnimation(fig, animate, frames=len(states)-1, interval=100 
 plt.xlim(0, gridSize)
 plt.ylim(0, gridSize)
 
+plt.xlabel('X (m)')
+plt.ylabel('Y (m)')
+
 plt.show()

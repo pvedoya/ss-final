@@ -52,13 +52,14 @@ public class App {
             return;
         }
 
-        
         List<Soldier> soldiers = input.getSoldiers();
 
         State state = new State(soldiers, input.getGridSize(), DT);
         double time = 0;
 
         List<List<OutputParticle>> states = new ArrayList<>();
+        List<Integer> redDeaths = new ArrayList<>();
+        List<Integer> blueDeaths = new ArrayList<>();
 
         while (state.getBlueDeaths() < state.getBlueSoldiers().size()
                 && state.getRedDeaths() < state.getRedSoldiers().size()
@@ -66,19 +67,22 @@ public class App {
 
             state.simulate();
 
-            if (time % (DT * 2) == 0) {
+            if (time % (DT * 5) == 0) {
                 states.add(saveState(state.getSoldiers()));
+                redDeaths.add(state.getRedDeaths());
+                blueDeaths.add(state.getBlueDeaths());
             }
 
             time += DT;
         }
 
         states.add(saveState(state.getSoldiers()));
-
+        redDeaths.add(state.getRedDeaths());
+        blueDeaths.add(state.getBlueDeaths());
 
         try {
-            parser.dumpToJson(new OutputFormat(state.getRedDeaths(), state.getBlueDeaths(), states, input.getGridSize(),
-                    Soldier.MAX_R, DT, time));
+            parser.dumpToJson(
+                    new OutputFormat(redDeaths, blueDeaths, states, input.getSoldiers().size()/2, input.getGridSize(), Soldier.MAX_R, DT));
         } catch (IOException e) {
             e.printStackTrace();
         }
