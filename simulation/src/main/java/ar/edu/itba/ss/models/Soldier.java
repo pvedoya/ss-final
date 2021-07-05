@@ -131,7 +131,12 @@ public class Soldier {
         double dx = Math.cos(omega) * v * dt;
         double dy = Math.sin(omega) * v * dt;
 
-        if (x + dx <= 0 || x + dx >= spaceSize) {
+
+        // for granular motion debugging purposes only
+        // boolean isNotOnOpening = (y + dy <= (spaceSize-1.2)/2 || y+dy >= (spaceSize+1.2)/2);
+        boolean isNotOnOpening = true;
+
+        if (isNotOnOpening && (x + dx <= 0 || x + dx >= spaceSize)) {
             dx = 0;
         }
 

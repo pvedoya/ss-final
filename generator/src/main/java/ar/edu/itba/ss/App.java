@@ -44,9 +44,10 @@ public class App {
         System.out.println("======================================");
         System.out.println("Generator Parameters:");
         System.out.println("Output: " + args.getOutputFileUrl());
-        System.out.println("Soldiers: " + args.getSoldiers());
         System.out.println("Red formation: " + args.getRedFormation());
+        System.out.println("Red soldiers: " + args.getRedSoldiers());
         System.out.println("Blue formation: " + args.getBlueFormation());
+        System.out.println("Blue soldiers: " + args.getBlueSoldiers());
         System.out.println("--------------------------------------");
 
         // Generate factions
@@ -56,13 +57,16 @@ public class App {
         List<Soldier> redSoldiers;
         switch (args.getRedFormation()) {
             case "phalanx":
-                redSoldiers = generatePhalanx("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                redSoldiers = generatePhalanx("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "testudo":
-                redSoldiers = generateTestudo("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                redSoldiers = generateTestudo("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "shieldwall":
-                redSoldiers = generateShieldwall("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                redSoldiers = generateShieldwall("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
+                break;
+            case "uniform":
+                redSoldiers = generateUniform("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong faction input");
@@ -75,13 +79,16 @@ public class App {
         List<Soldier> blueSoldiers;
         switch (args.getBlueFormation()) {
             case "phalanx":
-                blueSoldiers = generatePhalanx("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                blueSoldiers = generatePhalanx("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "testudo":
-                blueSoldiers = generateTestudo("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                blueSoldiers = generateTestudo("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "shieldwall":
-                blueSoldiers = generateShieldwall("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                blueSoldiers = generateShieldwall("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
+                break;
+            case "uniform":
+                blueSoldiers = generateUniform("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong faction input");
@@ -90,7 +97,7 @@ public class App {
         soldiers.addAll(blueSoldiers);
 
         // Generating input JSON file
-        OutputFormat input = new OutputFormat(GRID_SIZE, args.getSoldiers(), FACTIONS, soldiers);
+        OutputFormat input = new OutputFormat(GRID_SIZE, args.getBlueSoldiers(), args.getRedSoldiers(), FACTIONS, soldiers);
 
         String outputURL;
         if (args.outputFileUrl == null) {
@@ -164,6 +171,30 @@ public class App {
 
         for (Soldier s : soldiers) {
             s.y += offset;
+        }
+
+        return soldiers;
+    }
+    // Generate uniform
+    private static List<Soldier> generateUniform(String faction, int soldierAmount, double gridSize, int firstId) {
+        List<Soldier> soldiers = new ArrayList<>();
+
+        Double x;
+        Double y;
+        int idCounter = firstId;
+        while (soldiers.size() < soldierAmount) {
+            if (faction == "red") {
+                x = randDoubleBetween(0, gridSize/2.2);
+            } else {
+                x = randDoubleBetween(gridSize/2, gridSize);
+            }
+
+            y = randDoubleBetween(0, gridSize);
+            Soldier p = new Soldier(x, y, randDoubleBetween(0, 0.5), faction, idCounter++);
+
+            if(!hasSuperPosition(p, soldiers, MAX_RADIUS)){
+                soldiers.add(p);
+            }
         }
 
         return soldiers;
@@ -286,6 +317,19 @@ public class App {
         return soldiers;
     }
 
+
+    private static boolean hasSuperPosition(Soldier p, List<Soldier> particles, double radius) {
+        for (Soldier other : particles) {
+            double dx = other.x - p.x;
+            double dy = other.y - p.y;
+            double distance = Math.sqrt(dx*dx + dy*dy);
+            if (distance < 2*radius) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static double randDoubleBetween(double a, double b) {
         if (a == b) {
             return a;
@@ -299,7 +343,9 @@ public class App {
     @AllArgsConstructor
     private static class OutputFormat {
         double gridSize;
-        int soldiersAmountPerFaction;
+        // int soldiersAmountPerFaction;
+        int blueSoldiers;
+        int redSoldiers;
         int factions;
         List<Soldier> soldiers;
     }
