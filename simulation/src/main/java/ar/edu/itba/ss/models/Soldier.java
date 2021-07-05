@@ -144,7 +144,6 @@ public class Soldier {
 
         // for granular motion debugging purposes only
         // boolean isNotOnOpening = (y + dy <= (spaceSize-1.2)/2 || y+dy >= (spaceSize+1.2)/2);
-        
         boolean isNotOnOpening = true;
 
         if (isNotOnOpening && (x + dx <= 0 || x + dx >= spaceSize)) {
