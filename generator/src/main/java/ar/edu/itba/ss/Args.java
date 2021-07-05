@@ -27,4 +27,8 @@ public class Args {
         @Parameter(names = { "-rf", "--red-formation" }, description = "Formation for the red faction", required = true)
         String redFormation;
 
+        @Parameter(names = { "-et", "--training" }, description = "Training for elite", required = false)
+        double training = 1;
+
+
 }
