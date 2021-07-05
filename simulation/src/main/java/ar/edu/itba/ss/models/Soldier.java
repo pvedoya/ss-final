@@ -51,10 +51,6 @@ public class Soldier {
     @Getter
     private final int id;
 
-    @Getter
-    @Setter
-    private boolean fighting;
-
     @Setter
     private boolean attacked;
 
@@ -82,8 +78,6 @@ public class Soldier {
 
         this.id = id;
 
-        this.fighting = false;
-
         this.attacked = false;
 
         this.cpm = false;
@@ -95,36 +89,31 @@ public class Soldier {
         double nearestAngle = Double.POSITIVE_INFINITY;
 
         for (Soldier s : enemies) {
-            // double[] limits = { omega - Math.PI / 2, omega + Math.PI / 2 };
-            double angleBetween = calculateAngleBetween(s.x, s.y);
+            double angleBetween = this.calculateAngleBetween(s.x, s.y);
 
-            // if (angleBetween <= limits[1] && angleBetween >= limits[0]) {
-            double distance = calculateDistance(s.x, s.y) - 2 * MAX_R;
+            double distance = this.calculateDistance(s.x, s.y) - 2 * MAX_R;
             if (distance < nearestDistance) {
                 nearest = s;
                 nearestDistance = distance;
                 nearestAngle = angleBetween;
             }
-            // }
         }
 
         if (nearest != null) {
             double targetAngle;
             double[] v = {0, 0};
+            double nc = 10 * Math.exp(-nearestDistance / 3.5);
             
             if (faction.equals("red")) {
                 targetAngle = calculateAngleBetween(spaceSize + 5, spaceSize/2);
-
-                v[0] = Math.cos(targetAngle) * Math.exp(-x);
-                v[1] = Math.sin(targetAngle) * Math.exp(-x);
+                v[0] = Math.cos(targetAngle) ;   
+                v[1] = Math.sin(targetAngle) ;
             } else {
                 targetAngle = calculateAngleBetween(-5, spaceSize/2);
-                v[0] = Math.cos(targetAngle) * Math.exp(x);
-                v[1] = Math.sin(targetAngle) * Math.exp(x);
+                v[0] = Math.cos(targetAngle) ;
+                v[1] = Math.sin(targetAngle) ;
             }
 
-
-            double nc = 1.25 * Math.exp(-nearestDistance / 1.25);
 
             v[0] = v[0] + nc * Math.cos(nearestAngle);
             v[1] = v[1] + nc * Math.sin(nearestAngle);
@@ -134,6 +123,7 @@ public class Soldier {
             } else {
                 omega = Math.atan2(v[1], v[0]);
             }
+
         }
     }
 
@@ -159,8 +149,6 @@ public class Soldier {
     }
 
     public void updateParticleState(double dt) {
-        attacked = false;
-
         if (r < MAX_R) {
             r += MAX_R / (TAU / dt);
         }
