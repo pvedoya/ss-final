@@ -55,6 +55,8 @@ public class App {
 
         // First faction
         List<Soldier> redSoldiers;
+        double training = args.getTraining();
+
         switch (args.getRedFormation()) {
             case "phalanx":
                 redSoldiers = generatePhalanx("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
@@ -67,6 +69,9 @@ public class App {
                 break;
             case "uniform":
                 redSoldiers = generateUniform("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
+                break;
+            case "elite":
+                redSoldiers = generateElite("red", args.getRedSoldiers(), GRID_SIZE, idCounter, training);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong faction input");
@@ -89,6 +94,9 @@ public class App {
                 break;
             case "uniform":
                 blueSoldiers = generateUniform("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
+                break;
+            case "elite":
+                blueSoldiers = generateElite("red", args.getBlueSoldiers(), GRID_SIZE, idCounter, training);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong faction input");
@@ -151,6 +159,55 @@ public class App {
             } else {
                 soldiers.add(new Soldier(x, y, randDoubleBetween(0, 0.5), faction, idCounter++));
             }
+
+            if (soldiers.size() % side == 0 && soldiers.size() != 0) {
+                maxY = y;
+                if (faction == "red") {
+                    x -= (MAX_RADIUS * 2 + 0.25);
+                } else {
+                    x += (MAX_RADIUS * 2 + 0.25);
+                }
+                y = 25;
+                line++;
+            } else {
+                y += (MAX_RADIUS * 2 + 0.25);
+            }
+        }
+
+        double mid = (maxY - 10)/2;
+        double offset = 15 - (10+mid);
+
+        for (Soldier s : soldiers) {
+            s.y += offset;
+        }
+
+        return soldiers;
+    }
+
+    // Same as phalanx but stronk
+    private static List<Soldier> generateElite(String faction, int soldierAmount, double gridSize, int firstId, double training) {
+        List<Soldier> soldiers = new ArrayList<>();
+        int idCounter = firstId;
+
+        int side = (int) Math.sqrt(soldierAmount);
+        int line = 1;
+
+        double x;
+        double y = 25;
+
+        double maxY = y;
+
+        if (faction == "red") {
+            x = 20;
+        } else if (faction == "blue") {
+            x = 30;
+        } else {
+            throw new IllegalArgumentException("Wrong faction detected");
+        }
+
+        while (soldiers.size() < soldierAmount) {
+
+            soldiers.add(new Soldier(x, y, training, faction, idCounter++));
 
             if (soldiers.size() % side == 0 && soldiers.size() != 0) {
                 maxY = y;
