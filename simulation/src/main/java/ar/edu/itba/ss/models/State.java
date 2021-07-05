@@ -120,7 +120,7 @@ public class State {
 
                         redSoldier.setAttacked(true);
 
-                        double newHp = blueSoldier.getHp() - redSoldier.getDps();
+                        double newHp = blueSoldier.getHp() - redSoldier.getDps() * dt;
                         blueSoldier.setHp(newHp);
                     }
 
@@ -130,7 +130,7 @@ public class State {
 
                         blueSoldier.setAttacked(true);
 
-                        double newHp = redSoldier.getHp() - blueSoldier.getDps();
+                        double newHp = redSoldier.getHp() - blueSoldier.getDps() * dt;
                         redSoldier.setHp(newHp);
                     }
 
