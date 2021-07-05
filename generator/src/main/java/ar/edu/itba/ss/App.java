@@ -44,9 +44,10 @@ public class App {
         System.out.println("======================================");
         System.out.println("Generator Parameters:");
         System.out.println("Output: " + args.getOutputFileUrl());
-        System.out.println("Soldiers: " + args.getSoldiers());
         System.out.println("Red formation: " + args.getRedFormation());
+        System.out.println("Red soldiers: " + args.getRedSoldiers());
         System.out.println("Blue formation: " + args.getBlueFormation());
+        System.out.println("Blue soldiers: " + args.getBlueSoldiers());
         System.out.println("--------------------------------------");
 
         // Generate factions
@@ -56,16 +57,16 @@ public class App {
         List<Soldier> redSoldiers;
         switch (args.getRedFormation()) {
             case "phalanx":
-                redSoldiers = generatePhalanx("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                redSoldiers = generatePhalanx("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "testudo":
-                redSoldiers = generateTestudo("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                redSoldiers = generateTestudo("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "shieldwall":
-                redSoldiers = generateShieldwall("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                redSoldiers = generateShieldwall("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "uniform":
-                redSoldiers = generateUniform("red", args.getSoldiers(), GRID_SIZE, idCounter);
+                redSoldiers = generateUniform("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong faction input");
@@ -78,16 +79,16 @@ public class App {
         List<Soldier> blueSoldiers;
         switch (args.getBlueFormation()) {
             case "phalanx":
-                blueSoldiers = generatePhalanx("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                blueSoldiers = generatePhalanx("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "testudo":
-                blueSoldiers = generateTestudo("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                blueSoldiers = generateTestudo("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "shieldwall":
-                blueSoldiers = generateShieldwall("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                blueSoldiers = generateShieldwall("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "uniform":
-                blueSoldiers = generateUniform("blue", args.getSoldiers(), GRID_SIZE, idCounter);
+                blueSoldiers = generateUniform("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
                 break;
             default:
                 throw new IllegalArgumentException("Wrong faction input");
@@ -96,7 +97,7 @@ public class App {
         soldiers.addAll(blueSoldiers);
 
         // Generating input JSON file
-        OutputFormat input = new OutputFormat(GRID_SIZE, args.getSoldiers(), FACTIONS, soldiers);
+        OutputFormat input = new OutputFormat(GRID_SIZE, args.getBlueSoldiers(), args.getRedSoldiers(), FACTIONS, soldiers);
 
         String outputURL;
         if (args.outputFileUrl == null) {
@@ -189,7 +190,7 @@ public class App {
             }
 
             y = randDoubleBetween(0, gridSize);
-            Soldier p = new Soldier(x, y, randDoubleBetween(0.5, 1), faction, idCounter++);
+            Soldier p = new Soldier(x, y, randDoubleBetween(0, 0.5), faction, idCounter++);
 
             if(!hasSuperPosition(p, soldiers, MAX_RADIUS)){
                 soldiers.add(p);
@@ -342,7 +343,9 @@ public class App {
     @AllArgsConstructor
     private static class OutputFormat {
         double gridSize;
-        int soldiersAmountPerFaction;
+        // int soldiersAmountPerFaction;
+        int blueSoldiers;
+        int redSoldiers;
         int factions;
         List<Soldier> soldiers;
     }

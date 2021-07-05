@@ -12,7 +12,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class InputFormat {
     double gridSize;
-    int soldiersAmountPerFaction;
+    // int soldiersAmountPerFaction;
+    int blueSoldiers;
+    int redSoldiers;
     int factions;
     List<InputSoldier> soldiers;
 

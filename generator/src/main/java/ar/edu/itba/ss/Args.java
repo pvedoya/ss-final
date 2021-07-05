@@ -13,9 +13,13 @@ public class Args {
         String outputFileUrl;
 
         // Soldiers params
-        @Parameter(names = { "-n",
-                        "--soldiers-amount" }, description = "Amount of agent particles per faction", required = true)
-        int soldiers;
+        @Parameter(names = { "-rn",
+                        "--red-soldiers-amount" }, description = "Amount of agent particles per red faction", required = true)
+        int redSoldiers;
+
+        @Parameter(names = { "-bn",
+                        "--blue-soldiers-amount" }, description = "Amount of agent particles per blue faction", required = true)
+        int blueSoldiers;
 
         @Parameter(names = { "-bf", "--blue-formation" }, description = "Formation for the blue faction", required = true)
         String blueFormation;
