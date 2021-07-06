@@ -98,8 +98,8 @@ for i in range(len(red_deaths)):
     blue_percentages.append(blue_deaths[i] * 100)
     time += (5 * dt) #Si cambio cada cuanto guardo dts hay que cambiar esto si o si
 
-plt.errorbar(times, red_percentages, red_error, color='red', label='Red Faction')
-plt.errorbar(times, blue_percentages, blue_error, color='blue', label='Blue Faction')
+plt.errorbar(times, red_percentages, red_error, color='red', label='Equipo Rojo')
+plt.errorbar(times, blue_percentages, blue_error, color='blue', label='Equipo Azul')
 
 plt.legend()
 plt.grid()

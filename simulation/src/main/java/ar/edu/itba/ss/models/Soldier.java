@@ -58,9 +58,14 @@ public class Soldier {
     @Setter
     private boolean cpm;
 
+    @Getter
+    private double training;
+
     public Soldier(double x, double y, double training, String faction, int id) {
         this.x = x;
         this.y = y;
+
+        this.training = training;
 
         this.hp = training * MAX_HP;
         this.dps = training * MAX_DPS;

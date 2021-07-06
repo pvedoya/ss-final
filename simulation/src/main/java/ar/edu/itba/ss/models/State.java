@@ -120,7 +120,13 @@ public class State {
 
                         redSoldier.setAttacked(true);
 
-                        double newHp = blueSoldier.getHp() - redSoldier.getDps() * dt;
+                        double damage = redSoldier.getDps() * dt;
+
+                        if(Math.random() <= (redSoldier.getTraining()/10)){
+                            damage = blueSoldier.getHp();
+                        }
+
+                        double newHp = blueSoldier.getHp() - damage;
                         blueSoldier.setHp(newHp);
                     }
 
@@ -130,7 +136,13 @@ public class State {
 
                         blueSoldier.setAttacked(true);
 
-                        double newHp = redSoldier.getHp() - blueSoldier.getDps() * dt;
+                        double damage = blueSoldier.getDps() * dt;
+
+                        if(Math.random() <= (blueSoldier.getTraining()/10)){
+                            damage = redSoldier.getHp();
+                        }
+
+                        double newHp = redSoldier.getHp() - damage;
                         redSoldier.setHp(newHp);
                     }
 
