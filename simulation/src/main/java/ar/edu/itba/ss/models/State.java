@@ -49,7 +49,7 @@ public class State {
         this.redDeaths = 0;
         this.blueDeaths = 0;
 
-        this.contact = true;
+        this.contact = false;
     }
 
     public void simulate() {
