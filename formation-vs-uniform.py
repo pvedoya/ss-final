@@ -9,12 +9,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-o', '--output-file', help='output file location',
                     required=False, default='generated-files/simulation/random-simulation.json')
 
-parser.add_argument('-rf', '--red-formation', help='Formation for red faction',
-                    required=False, default='testudo')
 parser.add_argument('-rn', '--red-n', help='Amount of soldiers for red faction',
                     required=False, default=50)
 
-parser.add_argument('-bn', '--blue-n', help='Max amount of soldiers for blue faction',
+parser.add_argument('-bn', '--blue-n', help='Max amount of soldiers for uniform formation',
                     required=False, default=65)
 parser.add_argument('-t', '--max-time', help='Max time for each iteration',
                     required=False, default=500)
@@ -25,22 +23,19 @@ parser.add_argument('-it', '--iterations', help='Max amount of iterations',
 args = parser.parse_args()
 output_path = args.output_file
 blue_n = args.blue_n
-red_formation = args.red_formation
 red_n = args.red_n
 iterations = int(args.iterations)
 
 t = float(args.max_time)
 
-blue_formations = ["phalanx", "testudo", "shieldwall", "uniform"]
+red_formations = ["phalanx", "testudo", "shieldwall"]
 
 
 def run_simulations():
-    print("Running simulations with red formation " + red_formation +
-          " (" + str(red_n) + " soldiers), for a time of " + str(t))
 
     wins_per_formation = []
 
-    for blue_formation in blue_formations:
+    for red_formation in red_formations:
         soldiers = red_n - 15
         total_wins = []
 
@@ -50,9 +45,8 @@ def run_simulations():
 
             while it < iterations:
                 os.system("mkdir -p generated-files")
-                os.system('java -jar generator/target/generator-1.0-SNAPSHOT-jar-with-dependencies.jar -bf ' + blue_formation
-                          + ' -rf ' + red_formation + ' -bn ' + str(soldiers) + ' -rn ' + str(red_n) +
-                          ' && java -jar simulation/target/simulation-1.0-SNAPSHOT-jar-with-dependencies.jar -t ' + str(t))
+                os.system('java -jar generator/target/generator-1.0-SNAPSHOT-jar-with-dependencies.jar -bf uniform -rf '
+                 + red_formation + ' -bn ' + str(soldiers) + ' -rn ' + str(red_n) + ' && java -jar simulation/target/simulation-1.0-SNAPSHOT-jar-with-dependencies.jar -t ' + str(t))
 
                 data = json.load(open(output_path))
                 winner = str(data['winner'])
@@ -63,9 +57,10 @@ def run_simulations():
                 it += 1
 
             total_wins.append((wins/iterations) * 100)
+            print(soldiers)
             soldiers += 5
 
-        wins_per_formation.append([blue_formation, total_wins])
+        wins_per_formation.append([red_formation, total_wins])
 
 
     return wins_per_formation
@@ -76,13 +71,15 @@ soldiers = []
 for i in range(red_n - 15, blue_n, 5):
     soldiers.append(i)
 
+print(soldiers)
+
 for formation in wins_per_formation:
     plt.plot(soldiers, formation[1], label=formation[0])
 
 plt.legend()
 plt.grid()
 
-plt.xlabel('Unidades de formacion azul')
+plt.xlabel('Unidades de formacion uniforme s(azul)')
 plt.ylabel('Porcentaje de victorias de formacion roja (%)')
 
 plt.show()
