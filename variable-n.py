@@ -41,7 +41,7 @@ def run_simulations():
     wins_per_formation = []
 
     for blue_formation in blue_formations:
-        soldiers = red_n - 15
+        soldiers = red_n - 10
         total_wins = []
 
         while soldiers < blue_n:
@@ -73,14 +73,26 @@ def run_simulations():
 wins_per_formation = run_simulations()
 soldiers = []
 
-for i in range(red_n - 15, blue_n, 5):
+for i in range(red_n - 10, blue_n, 5):
     soldiers.append(i)
 
 for formation in wins_per_formation:
-    plt.plot(soldiers, formation[1], label=formation[0])
+    f = ""
+    if formation[0] == "phalanx":
+        f = "Falange"
+    elif formation[0] == "testudo":
+        f = "Testudo"
+    elif formation[0] == "shieldwall":
+        f = "Muralla de escudos"
+    else:
+        f = "Uniforme"
+    
+    plt.plot(soldiers, formation[1], label=f)
 
 plt.legend()
 plt.grid()
+
+plt.ylim(0, 100)
 
 plt.xlabel('Unidades de formacion azul')
 plt.ylabel('Porcentaje de victorias de formacion roja (%)')
