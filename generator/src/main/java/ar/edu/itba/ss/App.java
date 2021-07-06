@@ -184,13 +184,12 @@ public class App {
         return soldiers;
     }
 
-    // Same as phalanx but stronk
+    // Same as phalanx but strong
     private static List<Soldier> generateElite(String faction, int soldierAmount, double gridSize, int firstId, double training) {
         List<Soldier> soldiers = new ArrayList<>();
         int idCounter = firstId;
 
         int side = (int) Math.sqrt(soldierAmount);
-        int line = 1;
 
         double x;
         double y = 25;
@@ -217,7 +216,6 @@ public class App {
                     x += (MAX_RADIUS * 2 + 0.25);
                 }
                 y = 25;
-                line++;
             } else {
                 y += (MAX_RADIUS * 2 + 0.25);
             }

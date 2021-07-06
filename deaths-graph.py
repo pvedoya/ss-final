@@ -33,7 +33,7 @@ it = int(args.iterations)
 
 
 def run_simulations():
-    print("Running simulation with blue formation " + blue_formation + " (" + str(blue_n) + " soldiers), red formation " +
+    print("Running simulations with blue formation " + blue_formation + " (" + str(blue_n) + " soldiers), red formation " +
           red_formation + " (" + str(red_n) + " soldiers), for a time of " + str(t) + " and " + str(it) + " iterations")
 
     red_deaths = []

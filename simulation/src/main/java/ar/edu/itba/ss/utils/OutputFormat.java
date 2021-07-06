@@ -16,4 +16,5 @@ public class OutputFormat {
     private double l;
     private double r;
     private double dt;
+    private String winner;
 }

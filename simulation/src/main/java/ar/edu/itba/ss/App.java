@@ -80,9 +80,18 @@ public class App {
         redDeaths.add(state.getRedDeaths());
         blueDeaths.add(state.getBlueDeaths());
 
+        String winner;
+        if(state.getRedDeaths() == state.getRedSoldiers().size()){
+            winner = "blue";
+        }
+        else{
+            winner = "red";
+        }
+
         try {
             parser.dumpToJson(
-                    new OutputFormat(redDeaths, blueDeaths, states, input.getSoldiers().size()/2, input.getGridSize(), Soldier.MAX_R, DT));
+                    new OutputFormat(redDeaths, blueDeaths, states, input.getSoldiers().size()/2, input.getGridSize(), 
+                    Soldier.MAX_R, DT, winner));
         } catch (IOException e) {
             e.printStackTrace();
         }
