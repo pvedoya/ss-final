@@ -325,7 +325,9 @@ public class App {
         int line = 1;
 
         int width = soldierAmount / 10;
-        width = Math.max(2, width*3);
+        width = Math.max(6, width*3);
+
+        System.out.println(width);
 
         double x;
         double y = 25;
