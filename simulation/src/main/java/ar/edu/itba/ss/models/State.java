@@ -139,6 +139,8 @@ public class State {
                         double damage = blueSoldier.getDps() * dt;
 
                         if(Math.random() <= (blueSoldier.getTraining()/10)){
+                        // disable crit
+                        // if(false){
                             damage = redSoldier.getHp();
                         }
 
