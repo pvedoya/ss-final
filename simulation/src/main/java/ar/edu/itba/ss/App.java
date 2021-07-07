@@ -81,7 +81,7 @@ public class App {
         blueDeaths.add(state.getBlueDeaths());
 
         String winner;
-        if(state.getRedDeaths() == state.getRedSoldiers().size()){
+        if(state.getRedDeaths() > state.getBlueDeaths()){
             winner = "blue";
         }
         else{
