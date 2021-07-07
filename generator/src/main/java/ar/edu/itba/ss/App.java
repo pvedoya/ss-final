@@ -64,8 +64,8 @@ public class App {
             case "testudo":
                 redSoldiers = generateTestudo("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
                 break;
-            case "shieldwall":
-                redSoldiers = generateShieldwall("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
+            case "fulcrum":
+                redSoldiers = generateFulcrum("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "uniform":
                 redSoldiers = generateUniform("red", args.getRedSoldiers(), GRID_SIZE, idCounter);
@@ -89,8 +89,8 @@ public class App {
             case "testudo":
                 blueSoldiers = generateTestudo("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
                 break;
-            case "shieldwall":
-                blueSoldiers = generateShieldwall("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
+            case "fulcrum":
+                blueSoldiers = generateFulcrum("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
                 break;
             case "uniform":
                 blueSoldiers = generateUniform("blue", args.getBlueSoldiers(), GRID_SIZE, idCounter);
@@ -318,7 +318,7 @@ public class App {
         return soldiers;
     }
 
-    private static List<Soldier> generateShieldwall(String faction, int soldierAmount, double gridSize, int firstId){
+    private static List<Soldier> generateFulcrum(String faction, int soldierAmount, double gridSize, int firstId){
         List<Soldier> soldiers = new ArrayList<>();
         int idCounter = firstId;
 

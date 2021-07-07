@@ -34,7 +34,7 @@ iterations = int(args.iterations)
 
 t = float(args.max_time)
 
-blue_formations = ["phalanx", "testudo", "shieldwall", "uniform"]
+blue_formations = ["phalanx", "testudo", "fulcrum", "uniform"]
 
 
 def run_simulations():
@@ -91,8 +91,8 @@ for formation in wins_per_formation:
         f = "Falange"
     elif formation[0] == "testudo":
         f = "Testudo"
-    elif formation[0] == "shieldwall":
-        f = "Muralla de escudos"
+    elif formation[0] == "fulcrum":
+        f = "Fulcrum"
     else:
         f = "Uniforme"
     
