@@ -1,4 +1,5 @@
 import json
+import datetime
 import os
 import argparse
 import numpy as np
@@ -6,6 +7,8 @@ from matplotlib import pyplot as plt
 plt.rcParams.update({'font.size': 22})
 
 parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input-file', help='input file location',
+                    required=False, default='invalid')
 parser.add_argument('-o', '--output-file', help='output file location',
                     required=False, default='generated-files/simulation/random-simulation.json')
 
@@ -70,8 +73,14 @@ def run_simulations():
 
     return wins_per_formation
 
-wins_per_formation = run_simulations()
 soldiers = []
+
+if args.input_file != 'invalid':
+    with open(args.input_file, 'r') as file:
+        data = json.load(file)
+        wins_per_formation = data['wins_per_formation']
+else:
+    wins_per_formation = run_simulations()
 
 for i in range(red_n - 10, blue_n, 5):
     soldiers.append(i)
@@ -96,5 +105,14 @@ plt.ylim(0, 100)
 
 plt.xlabel('Unidades de formacion azul')
 plt.ylabel('Porcentaje de victorias de formacion roja (%)')
+
+# I don't want to dump graphic if it's just old data
+os.system("mkdir -p generated-files/variable-n/")
+filename = "generated-files/variable-n/" + str(datetime.datetime.now())+".json"
+if args.input_file == 'invalid':
+    with open(filename, 'w') as outfile:
+        json.dump({
+            "wins_per_formation": wins_per_formation
+        }, outfile)
 
 plt.show()

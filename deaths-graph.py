@@ -1,4 +1,5 @@
 import json
+import datetime
 import os
 import argparse
 import numpy as np
@@ -6,6 +7,8 @@ from matplotlib import pyplot as plt
 plt.rcParams.update({'font.size': 22})
 
 parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input-file', help='input file location',
+                    required=False, default='invalid')
 parser.add_argument('-o', '--output-file', help='output file location',
                     required=False, default='generated-files/simulation/random-simulation.json')
 parser.add_argument('-rf', '--red-formation', help='Formation for red faction',
@@ -22,6 +25,7 @@ parser.add_argument('-t', '--max-time', help='Max time for each iteration',
                     required=False, default=500)
 
 args = parser.parse_args()
+print(args.input_file)
 output_path = args.output_file
 blue_formation = args.blue_formation
 blue_n = args.blue_n
@@ -85,12 +89,23 @@ def run_simulations():
     return red_sum, blue_sum, red_error, blue_error, dt
 
 
-red_deaths, blue_deaths, red_error, blue_error, dt = run_simulations()
 
 red_percentages = []
 blue_percentages = []
 times = []
 time = 0
+
+
+if args.input_file != 'invalid':
+    with open(args.input_file, 'r') as file:
+        data = json.load(file)
+        red_deaths = data['red_deaths']
+        red_error = data['red_error']
+        blue_deaths = data['blue_deaths']
+        blue_error = data['blue_error']
+        dt = data['dt']
+else:
+    red_deaths, blue_deaths, red_error, blue_error, dt = run_simulations()
 
 for i in range(len(red_deaths)):
     times.append(time)
@@ -106,5 +121,18 @@ plt.grid()
 
 plt.xlabel('Tiempo (s)')
 plt.ylabel('Porcentaje de muertes (%)')
+
+# I don't want to dump graphic if it's just old data
+os.system("mkdir -p generated-files/deaths-graph/")
+filename = "generated-files/deaths-graph/" + str(datetime.datetime.now())+".json"
+if args.input_file == 'invalid':
+    with open(filename, 'w') as outfile:
+        json.dump({
+            "red_deaths": red_deaths,
+            "red_error": red_error,
+            "blue_deaths": blue_deaths,
+            "blue_error": blue_error,
+            "dt": dt
+        }, outfile)
 
 plt.show()
