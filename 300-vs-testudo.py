@@ -97,13 +97,15 @@ plt.xlabel('Entrenamiento de la formacion elite')
 plt.ylabel('Porcentaje de victorias de formacion elite (%)')
 
 
+
+# I don't want to dump graphic if it's just old data
 os.system("mkdir -p generated-files/300-vs-testudo/")
 filename = "generated-files/300-vs-testudo/" + str(datetime.datetime.now())+".json"
-
-with open(filename, 'w') as outfile:
-    json.dump({
-        "training": training,
-        "wins": wins
-    }, outfile)
+if args.input_file == 'invalid':
+    with open(filename, 'w') as outfile:
+        json.dump({
+            "training": training,
+            "wins": wins
+        }, outfile)
 
 plt.show()
