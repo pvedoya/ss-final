@@ -84,7 +84,7 @@ if args.input_file != 'invalid':
 else:
     wins_per_formation = run_simulations()
 
-for i in range(red_n - 30, blue_n, 10):
+for i in range(red_n - 30, blue_n + 10, 10):
     soldiers.append(i)
 
 for formation in wins_per_formation:

@@ -42,7 +42,7 @@ def run_simulations():
         soldiers = red_n
         total_wins = []
 
-        while soldiers < blue_n:
+        while soldiers <= blue_n:
             it = 0
             wins = 0
 
@@ -90,12 +90,12 @@ for formation in wins_per_formation:
     else:
         f = "Uniforme"
 
-    plt.plot(soldiers, formation[1], label=f)
+    plt.plot(soldiers, formation[1], label=f, marker = "o")
 
 plt.legend()
 plt.grid()
 
-plt.ylim(0, 100)
+plt.ylim(0, 110)
 
 plt.xlabel('Unidades de formacion uniforme (azul)')
 plt.ylabel('Porcentaje de victorias de formacion uniforme (%)')
