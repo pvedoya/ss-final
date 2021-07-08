@@ -60,7 +60,7 @@ def run_simulations():
                 it += 1
 
             total_wins.append((wins/iterations) * 100)
-            soldiers += 50
+            soldiers += 10
 
         wins_per_formation.append([red_formation, total_wins])
 
@@ -76,7 +76,7 @@ if args.input_file != 'invalid':
 else:
     wins_per_formation = run_simulations()
 
-for i in range(red_n , blue_n, 50):
+for i in range(red_n , blue_n, 10):
     soldiers.append(i)
 
 for formation in wins_per_formation:
