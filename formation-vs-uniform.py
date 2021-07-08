@@ -25,8 +25,8 @@ parser.add_argument('-it', '--iterations', help='Max amount of iterations',
 
 args = parser.parse_args()
 output_path = args.output_file
-blue_n = args.blue_n
-red_n = args.red_n
+blue_n = int(args.blue_n)
+red_n = int (args.red_n)
 iterations = int(args.iterations)
 
 t = float(args.max_time)
@@ -39,7 +39,7 @@ def run_simulations():
     wins_per_formation = []
 
     for red_formation in red_formations:
-        soldiers = red_n - 10
+        soldiers = red_n
         total_wins = []
 
         while soldiers < blue_n:
@@ -54,14 +54,13 @@ def run_simulations():
                 data = json.load(open(output_path))
                 winner = str(data['winner'])
 
-                if(winner == "red"):
+                if(winner == "blue"):
                     wins+=1
                 
                 it += 1
 
             total_wins.append((wins/iterations) * 100)
-            print(soldiers)
-            soldiers += 5
+            soldiers += 50
 
         wins_per_formation.append([red_formation, total_wins])
 
@@ -77,7 +76,7 @@ if args.input_file != 'invalid':
 else:
     wins_per_formation = run_simulations()
 
-for i in range(red_n - 10, blue_n, 5):
+for i in range(red_n , blue_n, 50):
     soldiers.append(i)
 
 for formation in wins_per_formation:
@@ -99,7 +98,7 @@ plt.grid()
 plt.ylim(0, 100)
 
 plt.xlabel('Unidades de formacion uniforme (azul)')
-plt.ylabel('Porcentaje de victorias de formacion roja (%)')
+plt.ylabel('Porcentaje de victorias de formacion uniforme (%)')
 
 # I don't want to dump graphic if it's just old data
 os.system("mkdir -p generated-files/formation-vs-uniform/")

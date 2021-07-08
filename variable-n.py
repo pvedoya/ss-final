@@ -27,9 +27,9 @@ parser.add_argument('-it', '--iterations', help='Max amount of iterations',
 
 args = parser.parse_args()
 output_path = args.output_file
-blue_n = args.blue_n
+blue_n = int(args.blue_n)
 red_formation = args.red_formation
-red_n = args.red_n
+red_n = int(args.red_n)
 iterations = int(args.iterations)
 
 t = float(args.max_time)
@@ -44,7 +44,9 @@ def run_simulations():
     wins_per_formation = []
 
     for blue_formation in blue_formations:
-        soldiers = red_n - 10
+        if(blue_formation == red_formation):
+            continue
+        soldiers = red_n - 30
         total_wins = []
 
         while soldiers < blue_n:
@@ -60,13 +62,13 @@ def run_simulations():
                 data = json.load(open(output_path))
                 winner = str(data['winner'])
 
-                if(winner == "red"):
+                if(winner == "blue"):
                     wins+=1
                 
                 it += 1
 
             total_wins.append((wins/iterations) * 100)
-            soldiers += 5
+            soldiers += 10
 
         wins_per_formation.append([blue_formation, total_wins])
 
@@ -82,7 +84,7 @@ if args.input_file != 'invalid':
 else:
     wins_per_formation = run_simulations()
 
-for i in range(red_n - 10, blue_n, 5):
+for i in range(red_n - 30, blue_n, 10):
     soldiers.append(i)
 
 for formation in wins_per_formation:
@@ -96,15 +98,15 @@ for formation in wins_per_formation:
     else:
         f = "Uniforme"
     
-    plt.plot(soldiers, formation[1], label=f)
+    plt.plot(soldiers, formation[1], label=f, marker="o")
 
 plt.legend()
 plt.grid()
 
-plt.ylim(0, 100)
+plt.ylim(0, 110)
 
-plt.xlabel('Unidades de formacion azul')
-plt.ylabel('Porcentaje de victorias de formacion roja (%)')
+plt.xlabel('Unidades del enemigo')
+plt.ylabel('Porcentaje de victorias del enemigo (%)')
 
 # I don't want to dump graphic if it's just old data
 os.system("mkdir -p generated-files/variable-n/")

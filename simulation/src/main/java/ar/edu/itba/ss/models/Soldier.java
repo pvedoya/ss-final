@@ -107,7 +107,7 @@ public class Soldier {
         if (nearest != null) {
             double targetAngle;
             double[] v = {0, 0};
-            double nc = 10 * Math.exp(-nearestDistance / 3.5);
+            double nc = 20 * Math.exp(-nearestDistance / 3.5);
             
             if (faction.equals("red")) {
                 targetAngle = calculateAngleBetween(spaceSize + 5, spaceSize/2);

@@ -25,7 +25,6 @@ parser.add_argument('-t', '--max-time', help='Max time for each iteration',
                     required=False, default=500)
 
 args = parser.parse_args()
-print(args.input_file)
 output_path = args.output_file
 blue_formation = args.blue_formation
 blue_n = args.blue_n
@@ -113,8 +112,8 @@ for i in range(len(red_deaths)):
     blue_percentages.append(blue_deaths[i] * 100)
     time += (5 * dt) #Si cambio cada cuanto guardo dts hay que cambiar esto si o si
 
-plt.errorbar(times, red_percentages, red_error, color='red', label='Equipo Rojo')
-plt.errorbar(times, blue_percentages, blue_error, color='blue', label='Equipo Azul')
+plt.errorbar(times, red_percentages, red_error, color='red', label='Fulcrum')
+plt.errorbar(times, blue_percentages, blue_error, color='blue', label='Uniforme')
 
 plt.legend()
 plt.grid()
