@@ -49,7 +49,7 @@ def run_simulations():
         soldiers = red_n - 30
         total_wins = []
 
-        while soldiers < blue_n:
+        while soldiers <= blue_n:
             it = 0
             wins = 0
 

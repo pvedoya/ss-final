@@ -46,7 +46,7 @@ def run_simulations():
             it = 0
             wins = 0
 
-            while it < iterations:
+            while it <= iterations:
                 os.system("mkdir -p generated-files")
                 os.system('java -jar generator/target/generator-1.0-SNAPSHOT-jar-with-dependencies.jar -bf uniform -rf '
                  + red_formation + ' -bn ' + str(soldiers) + ' -rn ' + str(red_n) + ' && java -jar simulation/target/simulation-1.0-SNAPSHOT-jar-with-dependencies.jar -t ' + str(t))
@@ -60,7 +60,7 @@ def run_simulations():
                 it += 1
 
             total_wins.append((wins/iterations) * 100)
-            soldiers += 10
+            soldiers += 20
 
         wins_per_formation.append([red_formation, total_wins])
 
@@ -76,7 +76,7 @@ if args.input_file != 'invalid':
 else:
     wins_per_formation = run_simulations()
 
-for i in range(red_n , blue_n, 10):
+for i in range(red_n , blue_n, 20):
     soldiers.append(i)
 
 for formation in wins_per_formation:
