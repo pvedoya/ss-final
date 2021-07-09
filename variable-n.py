@@ -81,11 +81,11 @@ if args.input_file != 'invalid':
     with open(args.input_file, 'r') as file:
         data = json.load(file)
         wins_per_formation = data['wins_per_formation']
+        soldiers = data['soldiers']
 else:
     wins_per_formation = run_simulations()
-
-for i in range(red_n - 30, blue_n + 10, 10):
-    soldiers.append(i)
+    for i in range(red_n - 30, blue_n + 10, 10):
+        soldiers.append(i)
 
 for formation in wins_per_formation:
     f = ""
@@ -114,7 +114,8 @@ filename = "generated-files/variable-n/" + str(datetime.datetime.now())+".json"
 if args.input_file == 'invalid':
     with open(filename, 'w') as outfile:
         json.dump({
-            "wins_per_formation": wins_per_formation
+            "wins_per_formation": wins_per_formation,
+            "soldiers": soldiers
         }, outfile)
 
 plt.show()
