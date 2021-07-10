@@ -113,7 +113,7 @@ for i in range(len(red_deaths)):
     time += (5 * dt) #Si cambio cada cuanto guardo dts hay que cambiar esto si o si
 
 plt.errorbar(times, red_percentages, red_error, color='red', label='Fulcrum')
-plt.errorbar(times, blue_percentages, blue_error, color='blue', label='Uniforme')
+plt.errorbar(times, blue_percentages, blue_error, color='blue', label='Milicia')
 
 plt.legend()
 plt.grid()

@@ -96,8 +96,8 @@ plt.grid()
 
 plt.ylim(0, 110)
 
-plt.xlabel('Unidades de formacion uniforme (azul)')
-plt.ylabel('Porcentaje de victorias de formacion uniforme (%)')
+plt.xlabel('Unidades de Milicia')
+plt.ylabel('Porcentaje de victorias de Milicia (%)')
 
 # I don't want to dump graphic if it's just old data
 os.system("mkdir -p generated-files/formation-vs-uniform/")
