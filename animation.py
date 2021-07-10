@@ -1,4 +1,5 @@
 import json
+from time import sleep
 from matplotlib import animation, colors, pyplot as plt
 plt.rcParams.update({'font.size': 22})
 
@@ -56,7 +57,11 @@ def animate(i):
 
     return scat,
 
-anim = animation.FuncAnimation(fig, animate, frames=len(states)-1, interval=100 , repeat=False)
+
+anim = animation.FuncAnimation(fig, animate, frames=len(states)-1, interval=100 , repeat=True, repeat_delay=3000)
+
+
+
 
 plt.xlim(0, gridSize)
 plt.ylim(0, gridSize)
